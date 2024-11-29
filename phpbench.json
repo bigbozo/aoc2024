@@ -1,0 +1,12 @@
+{
+    "$schema":"./vendor/phpbench/phpbench/phpbench.schema.json",
+    "runner.bootstrap": "vendor/autoload.php",
+
+    "report.outputs": {
+        "build-artifact": {
+            "renderer": "html",
+            "path": "docs/benchmark.html",
+            "title": "Advent of Code 2024 Benchmarks"
+        }
+    }
+}
