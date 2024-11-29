@@ -27,7 +27,7 @@ class MakeSolution extends Command
 
         $day = (int)$input->getArgument('day');
 
-        $this->genreateSolution($day);
+        $this->generateSolution($day);
 
         if ($day < 1 || $day > 25) {
             $output->writeln(['Day out of range']);
@@ -91,10 +91,38 @@ class MakeSolution extends Command
         return sprintf("%s/../%s/Day%s/Solution.php", __DIR__, $year, $this->leadingZero($day));
     }
 
-    private function genreateSolution($day)
+    private function generateSolution($day)
     {
-        $template = file_get_contents(__DIR__ . '/../../templates/Solution.template');
-        $code = strtr(
+        $code = $this->parseTemplate('Solution.template', $day);
+
+        $filename = $this->getSolutionFilename($_ENV['YEAR'], $day);
+        if (!file_exists($filename)) {
+            mkdir(dirname($filename), recursive: true);
+            file_put_contents($filename, $code);
+            $this->addBenchmark($day);
+        }
+    }
+
+    private function addBenchmark($day)
+    {
+        $code = $this->parseTemplate('benchmark.template', $day);
+        $filename = __DIR__ . '/../../tests/Benchmark/AdventOfCodeBench.php';
+        $data = file_get_contents($filename);
+        $insertPosition = strrpos($data, '}');
+
+        $data = substr($data, 0, $insertPosition);
+        $data .= PHP_EOL . $code . PHP_EOL . '}' . PHP_EOL;
+        file_put_contents($filename, $data);
+    }
+
+    /**
+     * @param $day
+     * @return string
+     */
+    private function parseTemplate($template, $day): string
+    {
+        $template = file_get_contents(__DIR__ . '/../../templates/' . $template);
+        return strtr(
             $template,
             [
                 '###day###' => $day,
@@ -102,11 +130,6 @@ class MakeSolution extends Command
                 '###YEAR###' => $_ENV['YEAR']
             ]
         );
-        $filename = $this->getSolutionFilename($_ENV['YEAR'], $day);
-        if (!file_exists($filename)) {
-            mkdir(dirname($filename), recursive: true);
-            file_put_contents($filename, $code);
-        }
     }
 
 

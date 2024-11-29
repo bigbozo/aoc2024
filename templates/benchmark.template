@@ -1,0 +1,7 @@
+    /**
+     * @Revs(1000)
+     */
+    public function benchDay###DAY###()
+    {
+        (new \Bizbozo\AdventOfCode\Year2024\Day###DAY###\Solution)->solve(file_get_contents($this->getInputFilename(###day###)));
+    }
