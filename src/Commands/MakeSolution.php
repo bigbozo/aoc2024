@@ -2,6 +2,7 @@
 
 namespace Bizbozo\AdventOfCode\Commands;
 
+use Bizbozo\AdventOfCode\Traits\UsesInput;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\GuzzleException;
@@ -10,8 +11,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MakeSolution extends AbstractCommand
+class MakeSolution extends Command
 {
+    use UsesInput;
+
     protected function configure()
     {
         $this->setDescription('Create a stub for day x of AdventOfCode')

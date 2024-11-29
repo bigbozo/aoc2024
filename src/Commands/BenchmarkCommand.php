@@ -42,9 +42,9 @@ class BenchmarkCommand extends Command
             }
             return implode("|", $stream);
         }, $rows);
-        $stream = "# Benchmark Results" . PHP_EOL . PHP_EOL . implode(PHP_EOL, $rows);
+        $stream = "    # Benchmark Results" . PHP_EOL . PHP_EOL . implode(PHP_EOL, $rows);
 
-        file_put_contents("$project_dir/docs/benchmark.md", $stream);
+        file_put_contents("$project_dir/docs/benchmark.md", str_replace(PHP_EOL, PHP_EOL.'    ',$stream));
 
 
         return Command::SUCCESS;

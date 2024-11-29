@@ -1,17 +1,15 @@
 <?php
 
-namespace Bizbozo\AdventOfCode\Commands;
+namespace Bizbozo\AdventOfCode\Traits;
 
-use Symfony\Component\Console\Command\Command;
-
-class AbstractCommand extends Command
+trait UsesInput
 {
-    protected function getInputFilename(int $day)
+    public function getInputFilename(int $day)
     {
         return sprintf("%s/../../input/day%s.txt", __DIR__, $this->leadingZero($day));
     }
 
-    protected function getTestInputFilenames(int $day)
+    public function getTestInputFilenames(int $day)
     {
         return [
             sprintf("%s/../../input/day%s-test.txt", __DIR__, $this->leadingZero($day)),
@@ -23,7 +21,7 @@ class AbstractCommand extends Command
      * @param int $day
      * @return string
      */
-    protected function leadingZero(int $day): string
+    public function leadingZero(int $day): string
     {
         return str_pad($day, 2, '0', STR_PAD_LEFT);
     }
