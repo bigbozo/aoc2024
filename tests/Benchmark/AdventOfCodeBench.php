@@ -8,6 +8,7 @@ class AdventOfCodeBench
 {
     use UsesInput;
 
+
     /**
      * @Revs(1000)
      */
@@ -15,4 +16,5 @@ class AdventOfCodeBench
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day01\Solution)->solve(file_get_contents($this->getInputFilename(1)));
     }
+
 }
