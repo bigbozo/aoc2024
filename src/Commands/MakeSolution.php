@@ -88,7 +88,7 @@ class MakeSolution extends Command
 
     private function getSolutionFilename(string $year, int $day)
     {
-        return sprintf("%s/../%s/Day%s/Solution.php", __DIR__, $year, $this->leadingZero($day));
+        return sprintf("%s/../Year%s/Day%s/Solution.php", __DIR__, $year, $this->leadingZero($day));
     }
 
     private function generateSolution($day)
