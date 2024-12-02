@@ -28,12 +28,4 @@ class AdventOfCodeBench
     }
 
 
-    /**
-     * @Revs(1000)
-     */
-    public function benchDay02()
-    {
-        (new \Bizbozo\AdventOfCode\Year2024\Day02\Solution)->solve(file_get_contents($this->getInputFilename(2)));
-    }
-
 }

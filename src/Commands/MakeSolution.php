@@ -2,6 +2,7 @@
 
 namespace Bizbozo\AdventOfCode\Commands;
 
+use Bizbozo\AdventOfCode\Tests\Benchmark\AdventOfCodeBench;
 use Bizbozo\AdventOfCode\Traits\UsesInput;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
@@ -105,6 +106,8 @@ class MakeSolution extends Command
 
     private function addBenchmark($day)
     {
+
+        if (method_exists(AdventOfCodeBench::class,'benchDay'.$this->leadingZero($day)))
         $code = $this->parseTemplate('benchmark.template', $day);
         $filename = __DIR__ . '/../../tests/Benchmark/AdventOfCodeBench.php';
         $data = file_get_contents($filename);

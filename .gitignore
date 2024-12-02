@@ -4,3 +4,4 @@ input/day*.txt
 .env
 /.phpunit.result.cache
 output/
+.idea/
