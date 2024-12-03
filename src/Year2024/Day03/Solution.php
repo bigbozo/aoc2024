@@ -48,7 +48,7 @@ class Solution implements SolutionInterface
 
     public function getTitle(): string
     {
-        return "Day 3 - ";
+        return "Mull It Over";
     }
 
     #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
