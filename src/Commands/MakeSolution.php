@@ -107,7 +107,7 @@ class MakeSolution extends Command
     private function addBenchmark($day)
     {
 
-        if (method_exists(AdventOfCodeBench::class,'benchDay'.$this->leadingZero($day)))
+        if (method_exists(AdventOfCodeBench::class,'benchDay'.$this->leadingZero($day))) return;
         $code = $this->parseTemplate('benchmark.template', $day);
         $filename = __DIR__ . '/../../tests/Benchmark/AdventOfCodeBench.php';
         $data = file_get_contents($filename);
