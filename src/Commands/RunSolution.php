@@ -20,7 +20,8 @@ class RunSolution extends Command
         $this->setDescription('Run solution')
             ->setName('run')
             ->addArgument('day', InputArgument::REQUIRED, 'Day')
-            ->addArgument('to_day', InputArgument::OPTIONAL, ' to Day');
+            ->addArgument('to_day', InputArgument::OPTIONAL, ' to Day')
+            ->addArgument('year', InputArgument::OPTIONAL, ' year', $_ENV['YEAR']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -30,13 +31,14 @@ class RunSolution extends Command
         $day = $input->getArgument('day');
         $fromday = (int)($day == 'today' ? date('j') : $day);
         $toDay = (int)$input->getArgument('to_day') ?: $fromday;
-
+        $year = $toDay > 2000 ? $toDay : $input->getArgument('year');
+        $toDay = $toDay > 2000 ? $fromday : $toDay;
         for ($day = $fromday; $day <= $toDay; $day++) {
 
 
-            $class = sprintf("Bizbozo\\AdventOfCode\\Year%s\\Day%s\\Solution", $_ENV['YEAR'], $this->leadingZero($day));
-            $testInputFilenames = $this->getTestInputFilenames($day);
-            $inputFilename = $this->getInputFilename($day);
+            $class = sprintf("Bizbozo\\AdventOfCode\\Year%s\\Day%s\\Solution", $year, $this->leadingZero($day));
+            $testInputFilenames = $this->getTestInputFilenames($year, $day);
+            $inputFilename = $this->getInputFilename($year, $day);
 
             /** @var SolutionInterface $solution */
             $solution = new $class;

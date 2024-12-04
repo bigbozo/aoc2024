@@ -44,10 +44,11 @@ class MakeSolution extends Command
         }
 
         $this->generateSolution();
+        $this->addBenchmark();
 
 
-        $inputFilename = $this->getInputFilename();
-        $testInputFilenames = $this->getTestInputFilenames();
+        $inputFilename = $this->getInputFilename($this->year, $this->day);
+        $testInputFilenames = $this->getTestInputFilenames($this->year, $this->day);
         if (file_exists($inputFilename)) {
             $output->writeln(['Input-File exists. Aborting',]);
             return Command::FAILURE;
@@ -57,7 +58,7 @@ class MakeSolution extends Command
                 if ($data) {
                     $dir = dirname($inputFilename);
                     if (!is_dir($dir)) {
-                        mkdir($dir,0777, true);
+                        mkdir($dir, 0777, true);
                     }
                     file_put_contents($inputFilename, $data);
                 }
@@ -110,7 +111,6 @@ class MakeSolution extends Command
         if (!file_exists($filename)) {
             mkdir(dirname($filename), recursive: true);
             file_put_contents($filename, $code);
-            $this->addBenchmark();
         }
     }
 
@@ -118,17 +118,17 @@ class MakeSolution extends Command
     {
         // check if benchclass for year exists
 
-        $class = "Bigbozo\AdventOfCode\Tests\Benchmark\AdventOfCodeBench" . $this->year;
+        $class = "\Bigbozo\AdventOfCode\Tests\Benchmark\AdventOfCodeBench" . $this->year;
         $filename = __DIR__ . '/../../tests/Benchmark/AdventOfCodeBench' . $this->year . '.php';
 
-        if (!class_exists($class)) {
+        if (!file_exists($filename)) {
             $code = $this->parseTemplate('benchmarkClass.template');
             file_put_contents($filename, $code);
-        } else {
-            if (method_exists($class, 'benchDay' . $this->leadingZero($this->day))) return;
         }
         $code = $this->parseTemplate('benchmark.template');
-         $data = file_get_contents($filename);
+        $data = file_get_contents($filename);
+        if (strpos($data, 'benchDay' . $this->leadingZero($this->day)) !== false) return;
+
         $insertPosition = strrpos($data, '}');
 
         $data = substr($data, 0, $insertPosition);
