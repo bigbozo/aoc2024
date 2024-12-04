@@ -17,16 +17,17 @@ class Solution implements SolutionInterface
     private int $width;
     private int $height;
 
-    private function parseData(string $stream)
-    {
-        return 1;
-    }
-
     public function getTitle(): string
     {
         return "Ceres Search";
     }
 
+    /**
+     * Get the char at coordinate
+     * @param $x
+     * @param $y
+     * @return mixed|null
+     */
     private function get($x, $y)
     {
         if ($x < 0 || $y < 0) {
@@ -39,35 +40,17 @@ class Solution implements SolutionInterface
             null;
     }
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
-    {
 
-        $this->data = array_map(function ($line) {
-            return str_split($line);
-        }, explode("\n", $inputStream));
-        $this->height = count($this->data);
-        $this->width = count($this->data[0]);
-        $result = 0;
-        foreach ($this->data as $y => $line) {
-            foreach ($line as $x => $char) {
-                $result += $this->walk($x, $y, 'XMAS');
-            }
-        }
-
-        foreach ($this->data as $y => $line) {
-            foreach ($line as $x => $char) {
-                $result2 += $this->cross($x, $y);
-            }
-        }
-
-        return new SolutionResult(
-            4,
-            new UnitResult("The 1st answer is %s", [$result]),
-            new UnitResult('The 2nd answer is %s', [$result2])
-        );
-    }
-
-    private function walk(int|string $x, int|string $y, string $query, $dx = null, $dy = null)
+    /**
+     * Find matches for $query from position x/y; if no direction (dx/dy) is given all 8 directions are considered
+     * @param int $x
+     * @param int $y
+     * @param string $query
+     * @param $dx
+     * @param $dy
+     * @return int
+     */
+    private function walk(int $x, int $y, string $query, $dx = null, $dy = null)
     {
         $char = $this->get($x, $y);
         if ($char != substr($query, 0, 1)) return 0;
@@ -90,7 +73,14 @@ class Solution implements SolutionInterface
         }
     }
 
-    private function cross(int|string $x, int|string $y)
+
+    /**
+     * Find MAS-X at coordinate x/y
+     * @param int $x
+     * @param int $y
+     * @return int
+     */
+    private function cross(int $x, int $y)
     {
         $char = $this->get($x, $y);
         if ($char != 'A') return 0;
@@ -98,8 +88,8 @@ class Solution implements SolutionInterface
             for ($j = -1; $j <= 1; $j += 2) {
                 if ($this->get($x + $i, $y + $j) == 'M' && $this->get($x - $i, $y - $j) == 'S') {
                     if (
-                        ($this->get($x+$i,$y-$j)=='M' && $this->get($x-$i,$y+$j)=='S') ||
-                        ($this->get($x-$i,$y+$j)=='M' && $this->get($x+$i,$y-$j)=='S')
+                        ($this->get($x + $i, $y - $j) == 'M' && $this->get($x - $i, $y + $j) == 'S') ||
+                        ($this->get($x - $i, $y + $j) == 'M' && $this->get($x + $i, $y - $j) == 'S')
                     ) {
                         return 1;
                     }
@@ -108,4 +98,35 @@ class Solution implements SolutionInterface
         }
         return 0;
     }
+
+
+    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    {
+
+        $this->data = array_map('str_split', explode("\n", $inputStream));
+        $this->height = count($this->data);
+        $this->width = count($this->data[0]);
+
+        $result = 0;
+        foreach ($this->data as $y => $line) {
+            foreach ($line as $x => $char) {
+                $result += $this->walk($x, $y, 'XMAS');
+            }
+        }
+
+        $result2 = 0;
+        foreach ($this->data as $y => $line) {
+            foreach ($line as $x => $char) {
+                $result2 += $this->cross($x, $y);
+            }
+        }
+
+        return new SolutionResult(
+            4,
+            new UnitResult("XMAS appears %s times", [$result]),
+            new UnitResult('MAS-Xes appear %s times', [$result2])
+        );
+    }
+
+
 }
