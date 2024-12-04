@@ -20,7 +20,7 @@ class AdventOfCodeBench
 
 
     /**
-     * @Revs(1000)
+     * @Revs(200)
      */
     public function benchDay02()
     {
@@ -32,6 +32,13 @@ class AdventOfCodeBench
     public function benchDay03()
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day03\Solution)->solve(file_get_contents($this->getInputFilename(3)));
+    }
+    /**
+     * @Revs(20)
+     */
+    public function benchDay04()
+    {
+        (new \Bizbozo\AdventOfCode\Year2024\Day04\Solution)->solve(file_get_contents($this->getInputFilename(4)));
     }
 
 
