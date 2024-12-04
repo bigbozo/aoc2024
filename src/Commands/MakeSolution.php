@@ -2,7 +2,6 @@
 
 namespace Bizbozo\AdventOfCode\Commands;
 
-use Bizbozo\AdventOfCode\Tests\Benchmark\AdventOfCodeBench;
 use Bizbozo\AdventOfCode\Traits\UsesInput;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
@@ -16,39 +15,50 @@ class MakeSolution extends Command
 {
     use UsesInput;
 
+    private int $day;
+    private int $year;
+
     protected function configure()
     {
         $this->setDescription('Create a stub for day x of AdventOfCode')
             ->setName('generate')
-            ->addArgument('day', InputArgument::REQUIRED, 'Day');
+            ->addArgument('day', InputArgument::REQUIRED, 'Day')
+            ->addArgument('year', InputArgument::OPTIONAL, 'Year', $_ENV['YEAR']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $day = (int)$input->getArgument('day');
+        $this->day = (int)$input->getArgument('day');
+        $this->year = (int)$input->getArgument('year');
 
-        $this->generateSolution($day);
 
-        if ($day < 1 || $day > 25) {
+        if ($this->day < 1 || $this->day > 25) {
             $output->writeln(['Day out of range']);
             return Command::FAILURE;
         }
 
-        if (date('d') < $day) {
+        if (date('d') < $this->day && date('Y') <= $this->year) {
             $output->writeln(['Input-File not ready. You are too early',]);
             return Command::FAILURE;
         }
 
-        $inputFilename = $this->getInputFilename($day);
-        $testInputFilenames = $this->getTestInputFilenames($day);
+        $this->generateSolution();
+
+
+        $inputFilename = $this->getInputFilename();
+        $testInputFilenames = $this->getTestInputFilenames();
         if (file_exists($inputFilename)) {
             $output->writeln(['Input-File exists. Aborting',]);
             return Command::FAILURE;
         } else {
             try {
-                $data = $this->fetchInputData($day);
+                $data = $this->fetchInputData();
                 if ($data) {
+                    $dir = dirname($inputFilename);
+                    if (!is_dir($dir)) {
+                        mkdir($dir,0777, true);
+                    }
                     file_put_contents($inputFilename, $data);
                 }
                 touch($testInputFilenames[0]);
@@ -66,7 +76,7 @@ class MakeSolution extends Command
     /**
      * @throws GuzzleException
      */
-    private function fetchInputData(int $day): string
+    private function fetchInputData(): string
     {
         $client = new Client();
 
@@ -81,36 +91,44 @@ class MakeSolution extends Command
             'adventofcode.com'
         );
 
-        $res = $client->request('GET', sprintf("https://adventofcode.com/%s/day/%d/input", $_ENV['YEAR'], $day), [
+        $res = $client->request('GET', sprintf("https://adventofcode.com/%s/day/%d/input", $this->year, $this->day), [
             'cookies' => $jar
         ]);
         return $res->getBody()->getContents();
     }
 
-    private function getSolutionFilename(string $year, int $day)
+    private function getSolutionFilename()
     {
-        return sprintf("%s/../Year%s/Day%s/Solution.php", __DIR__, $year, $this->leadingZero($day));
+        return sprintf("%s/../Year%s/Day%s/Solution.php", __DIR__, $this->year, $this->leadingZero($this->day));
     }
 
-    private function generateSolution($day)
+    private function generateSolution()
     {
-        $code = $this->parseTemplate('Solution.template', $day);
+        $code = $this->parseTemplate('Solution.template');
 
-        $filename = $this->getSolutionFilename($_ENV['YEAR'], $day);
+        $filename = $this->getSolutionFilename();
         if (!file_exists($filename)) {
             mkdir(dirname($filename), recursive: true);
             file_put_contents($filename, $code);
-            $this->addBenchmark($day);
+            $this->addBenchmark();
         }
     }
 
-    private function addBenchmark($day)
+    private function addBenchmark()
     {
+        // check if benchclass for year exists
 
-        if (method_exists(AdventOfCodeBench::class,'benchDay'.$this->leadingZero($day))) return;
-        $code = $this->parseTemplate('benchmark.template', $day);
-        $filename = __DIR__ . '/../../tests/Benchmark/AdventOfCodeBench.php';
-        $data = file_get_contents($filename);
+        $class = "Bigbozo\AdventOfCode\Tests\Benchmark\AdventOfCodeBench" . $this->year;
+        $filename = __DIR__ . '/../../tests/Benchmark/AdventOfCodeBench' . $this->year . '.php';
+
+        if (!class_exists($class)) {
+            $code = $this->parseTemplate('benchmarkClass.template');
+            file_put_contents($filename, $code);
+        } else {
+            if (method_exists($class, 'benchDay' . $this->leadingZero($this->day))) return;
+        }
+        $code = $this->parseTemplate('benchmark.template');
+         $data = file_get_contents($filename);
         $insertPosition = strrpos($data, '}');
 
         $data = substr($data, 0, $insertPosition);
@@ -119,18 +137,17 @@ class MakeSolution extends Command
     }
 
     /**
-     * @param $day
      * @return string
      */
-    private function parseTemplate($template, $day): string
+    private function parseTemplate($template): string
     {
         $template = file_get_contents(__DIR__ . '/../../templates/' . $template);
         return strtr(
             $template,
             [
-                '###day###' => $day,
-                '###DAY###' => $this->leadingZero($day),
-                '###YEAR###' => $_ENV['YEAR']
+                '###day###' => $this->day,
+                '###DAY###' => $this->leadingZero($this->day),
+                '###YEAR###' => $this->year,
             ]
         );
     }

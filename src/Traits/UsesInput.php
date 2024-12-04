@@ -4,16 +4,16 @@ namespace Bizbozo\AdventOfCode\Traits;
 
 trait UsesInput
 {
-    public function getInputFilename(int $day)
+    public function getInputFilename(int $year, int $day)
     {
-        return sprintf("%s/../../input/day%s.txt", __DIR__, $this->leadingZero($day));
+        return sprintf("%s/../../input/%s/day%s.txt", __DIR__, $year, $this->leadingZero($day));
     }
 
-    public function getTestInputFilenames(int $day)
+    public function getTestInputFilenames(int $year, int $day)
     {
         return [
-            sprintf("%s/../../input/day%s-test.txt", __DIR__, $this->leadingZero($day)),
-            sprintf("%s/../../input/day%s-test2.txt", __DIR__, $this->leadingZero($day))
+            sprintf("%s/../../input/%s/day%s-test.txt", __DIR__, $year, $this->leadingZero($day)),
+            sprintf("%s/../../input/%s/day%s-test2.txt", __DIR__, $year, $this->leadingZero($day))
         ];
     }
 

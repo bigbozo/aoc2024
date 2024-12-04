@@ -28,7 +28,7 @@ class Solution implements SolutionInterface
      * @param $y
      * @return mixed|null
      */
-    private function get($x, $y)
+    private function get($x, $y): ?string
     {
         if ($x < 0 || $y < 0) {
             return null;
@@ -50,7 +50,7 @@ class Solution implements SolutionInterface
      * @param $dy
      * @return int
      */
-    private function walk(int $x, int $y, string $query, $dx = null, $dy = null)
+    private function walk(int $x, int $y, string $query, $dx = null, $dy = null): int
     {
         $char = $this->get($x, $y);
         if ($char != substr($query, 0, 1)) return 0;
@@ -80,7 +80,7 @@ class Solution implements SolutionInterface
      * @param int $y
      * @return int
      */
-    private function cross(int $x, int $y)
+    private function cross(int $x, int $y): int
     {
         $char = $this->get($x, $y);
         if ($char != 'A') return 0;

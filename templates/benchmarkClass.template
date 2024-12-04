@@ -1,0 +1,16 @@
+<?php
+
+namespace Bizbozo\AdventOfCode\Tests\Benchmark;
+
+use Bizbozo\AdventOfCode\Traits\UsesInput;
+
+class AdventOfCodeBench###YEAR###
+{
+    use UsesInput;
+
+
+
+
+
+
+}
