@@ -34,8 +34,8 @@ class Solution implements SolutionInterface
         };
         if ($x > $this->width - 1 || $y > $this->height - 1) {
             return null;
-        };
-        return $this->data[$y][$x];
+        };return $this->data[$y][$x]??
+            null;
     }
 
     #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
@@ -54,7 +54,7 @@ class Solution implements SolutionInterface
         }
         return new SolutionResult(
             4,
-            new UnitResult("The 1st answer is %s", [0]),
+            new UnitResult("The 1st answer is %s", [$result]),
             new UnitResult('The 2nd answer is %s', [0])
         );
     }
