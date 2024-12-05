@@ -25,14 +25,16 @@ class AdventOfCodeBench2024
      */
     public function benchDay02()
     {
-        (new \Bizbozo\AdventOfCode\Year2024\Day02\Solution)->solve(file_get_contents($this->getInputFilename(2024,2)));
+        (new \Bizbozo\AdventOfCode\Year2024\Day02\Solution)
+            ->solve(file_get_contents($this->getInputFilename(2024,2)));
     }
     /**
      * @Revs(1000)
      */
     public function benchDay03()
     {
-        (new \Bizbozo\AdventOfCode\Year2024\Day03\Solution)->solve(file_get_contents($this->getInputFilename(2024,3)));
+        (new \Bizbozo\AdventOfCode\Year2024\Day03\Solution)
+            ->solve(file_get_contents($this->getInputFilename(2024,3)));
     }
 
     /**
@@ -42,6 +44,16 @@ class AdventOfCodeBench2024
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day04\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024, 4)));
+    }
+
+
+    /**
+     * @Revs(1000)
+     */
+    public function benchDay05()
+    {
+        (new \Bizbozo\AdventOfCode\Year2024\Day05\Solution)
+            ->solve(file_get_contents($this->getInputFilename(2024, 5)));
     }
 
 }

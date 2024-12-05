@@ -4,5 +4,5 @@
     public function benchDay###DAY###()
     {
         (new \Bizbozo\AdventOfCode\Year###YEAR###\Day###DAY###\Solution)
-            ->solve(file_get_contents($this->getInputFilename(###day###)));
+            ->solve(file_get_contents($this->getInputFilename(###YEAR###, ###day###)));
     }

@@ -20,7 +20,7 @@ class AdventOfCodeBench2023
     public function benchDay01()
     {
         (new \Bizbozo\AdventOfCode\Year2023\Day01\Solution)
-            ->solve(file_get_contents($this->getInputFilename(1)));
+            ->solve(file_get_contents($this->getInputFilename(2023, 1)));
     }
 
 }
