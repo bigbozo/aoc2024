@@ -17,7 +17,34 @@ class Solution implements SolutionInterface
 
     public function getTitle(): string
     {
-        return "Day 5 - ";
+        return "Print Queue";
+    }
+
+    /**
+     * @param mixed $pageNumbers
+     * @param array $pagesInvalidBehind
+     * @return array
+     */
+    private function sortPages(mixed $pageNumbers, array $pagesInvalidBehind): array
+    {
+        $invalidPages = [];
+        foreach ($pageNumbers as $id => $pageNumber) {
+            if (isset($invalidPages[$pageNumber])) {
+                $pageNumbers = array_merge(
+                    array_slice($pageNumbers, 0, $id - 1),
+                    [$pageNumber],
+                    [$pageNumbers[$id-1]],
+                    array_slice($pageNumbers, $id + 1)
+                );
+                return $this->sortPages($pageNumbers, $pagesInvalidBehind);
+            }
+            if (isset($pagesInvalidBehind[$pageNumber])) {
+                foreach ($pagesInvalidBehind[$pageNumber] as $n) {
+                    $invalidPages[$n] = true;
+                }
+            }
+        }
+        return $pageNumbers;
     }
 
     #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
@@ -34,6 +61,7 @@ class Solution implements SolutionInterface
         $pages = array_map(fn($page) => explode(',', $page), array_filter(explode(PHP_EOL, $pages), 'trim'));
 
         $sum = 0;
+        $unsolved = [];
         foreach ($pages as $pageNumbers) {
 
             $invalidPages = [];
@@ -51,34 +79,23 @@ class Solution implements SolutionInterface
             }
             if ($pageOrderValid) {
                 $sum += $pageNumbers[floor(count($pageNumbers) / 2)];
+            } else {
+                $unsolved[] = $pageNumbers;
             }
         }
-        $sum = 0;
-        foreach ($pages as $pageNumbers) {
 
-            $invalidPages = [];
-            $pageOrderValid = true;
-            foreach ($pageNumbers as $pageNumber) {
-                if (isset($invalidPages[$pageNumber])) {
-                    $pageOrderValid = false;
-                    break;
-                }
-                if (isset($pagesInvalidBehind[$pageNumber])) {
-                    foreach ($pagesInvalidBehind[$pageNumber] as $n) {
-                        $invalidPages[$n] = true;
-                    }
-                }
-            }
-            if ($pageOrderValid) {
-                $sum += $pageNumbers[floor(count($pageNumbers) / 2)];
-            }
+        $sum2 = 0;
+        foreach ($unsolved as $pageNumbers) {
+            $pageNumbers = $this->sortPages($pageNumbers, $pagesInvalidBehind);
+            $sum2 += $pageNumbers[floor(count($pageNumbers) / 2)];
         }
 
 
         return new SolutionResult(
             5,
-            new UnitResult("The 1st answer is %s", [$sum]),
-            new UnitResult('The 2nd answer is %s', [0])
+            new UnitResult("%s is the middle-page sum of all valid updates", [$sum]),
+            new UnitResult('The middle-page-sum of all patched updates is %s', [$sum2])
         );
     }
+
 }
