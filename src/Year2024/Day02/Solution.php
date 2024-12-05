@@ -20,7 +20,7 @@ class Solution implements SolutionInterface
         return "Red-Nosed Reports";
     }
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
 
         $save = 0;

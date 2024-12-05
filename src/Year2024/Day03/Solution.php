@@ -51,7 +51,7 @@ class Solution implements SolutionInterface
         return "Mull It Over";
     }
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
 
         $sum = $this->compute($inputStream);

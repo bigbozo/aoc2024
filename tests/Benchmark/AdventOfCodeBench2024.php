@@ -13,7 +13,7 @@ class AdventOfCodeBench2024
     /**
      * @Revs(1000)
      */
-    public function benchDay01()
+    public function benchDay01(): void
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day01\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024, 1)));
@@ -23,7 +23,7 @@ class AdventOfCodeBench2024
     /**
      * @Revs(200)
      */
-    public function benchDay02()
+    public function benchDay02(): void
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day02\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024,2)));
@@ -31,7 +31,7 @@ class AdventOfCodeBench2024
     /**
      * @Revs(1000)
      */
-    public function benchDay03()
+    public function benchDay03(): void
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day03\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024,3)));
@@ -40,7 +40,7 @@ class AdventOfCodeBench2024
     /**
      * @Revs(20)
      */
-    public function benchDay04()
+    public function benchDay04(): void
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day04\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024, 4)));
@@ -50,7 +50,7 @@ class AdventOfCodeBench2024
     /**
      * @Revs(20)
      */
-    public function benchDay05()
+    public function benchDay05(): void
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day05\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024, 5)));

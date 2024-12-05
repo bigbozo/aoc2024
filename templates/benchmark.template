@@ -3,6 +3,6 @@
      */
     public function benchDay###DAY###()
     {
-        (new \Bizbozo\AdventOfCode\Year###YEAR###\Day###DAY###\Solution)
+        (new \Bizbozo\AdventOfCode\Year###YEAR###\Day###DAY###\Solution): void
             ->solve(file_get_contents($this->getInputFilename(###YEAR###, ###day###)));
     }

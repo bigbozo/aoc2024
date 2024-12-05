@@ -100,7 +100,7 @@ class Solution implements SolutionInterface
     }
 
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
 
         $this->data = array_map('str_split', explode("\n", $inputStream));

@@ -9,7 +9,7 @@ use Bizbozo\AdventOfCode\Solutions\UnitResult;
 class Solution implements SolutionInterface
 {
 
-  public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+  public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
   {
 
     // prepare data
