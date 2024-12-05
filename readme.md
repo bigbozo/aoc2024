@@ -6,12 +6,15 @@ https://adventofcode.com/2024/
 
 ## Stub-Generator
 
-    bin/aoc generate <day>
+    bin/aoc generate <day> <year=current year>
+    
 
 ## Run solution
 
-    bin/aoc run <day> [<to_day>]
+    bin/aoc run <day> [<to_day>] 
+    bin/aoc run <day> <year>
+    bin/aoc run <day> <to_day> <year>
 
 ## Run Benchmarks
 
-    bin/aoc benchmark
+    bin/aoc bench
