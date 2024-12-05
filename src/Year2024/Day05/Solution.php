@@ -47,7 +47,7 @@ class Solution implements SolutionInterface
         return $pageNumbers;
     }
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
 
         list($pairs, $pages) = explode(PHP_EOL . PHP_EOL, $inputStream);
