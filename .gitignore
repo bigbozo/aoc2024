@@ -1,6 +1,9 @@
 vendor/
 input/day*.txt
 !input/day*test.txt
+input/*/day*.txt
+!input/*/day*test.txt
+
 .env
 /.phpunit.result.cache
 output/
