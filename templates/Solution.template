@@ -20,7 +20,7 @@ class Solution implements SolutionInterface
         return "Day ###day### - ";
     }
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
 
         $data = static::parseData($inputStream);

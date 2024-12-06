@@ -39,7 +39,7 @@ class Solution implements SolutionInterface
         return "Guard Gallivant";
     }
 
-    #[Override] public function solve(string $inputStream, string $inputStream2 = null): SolutionResult
+    #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
 
         $this->board = array_map('str_split', explode(PHP_EOL, $inputStream));
