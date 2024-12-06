@@ -27,27 +27,27 @@ class Solution implements SolutionInterface
     #[Override] public function solve(string $inputStream, ?string $inputStream2 = null): SolutionResult
     {
         $board = new Board($inputStream);
+
         $pos = strpos($inputStream, '^');
         $player_x = $pos % ($board->width + 1);
         $player_y = floor($pos / ($board->width + 1));
 
-        $board1 = clone $board;
-        $count = $this->computeGuardiansPath($board1, $player_x, $player_y);
-        $count2 = 0;
+        $guardVisitsBoard = clone $board;
+        $count = $this->computeGuardiansPath($guardVisitsBoard, $player_x, $player_y);
 
+        $count2 = 0;
+        // enrich board with directional thrupass data
         $board->each(fn($cell) => ['tile' => $cell['tile'], 'dirs' => [false, false, false, false]]);
 
         for ($x = 0; $x < $board->width; $x++) {
             for ($y = 0; $y < $board->height; $y++) {
-                $testBoard = clone $board;
-                if ($board1->board[$y][$x]['tile'] == 'X') {
-                    $testBoard->board[$y][$x] = ['tile' => '#'];
-                    $count2 += $this->testGuardianIsLooping($testBoard, $player_x, $player_y) ? 1 : 0;
+                if ($guardVisitsBoard->board[$y][$x]['tile'] == 'X') {
+                    $placementSimulation = clone $board;
+                    $placementSimulation->board[$y][$x] = ['tile' => '#'];
+                    $count2 += $this->testGuardianIsLooping($placementSimulation, $player_x, $player_y) ? 1 : 0;
                 }
             }
-            // echo !($x % 10) ? '|' : (!($x % 2) ? '.' : '');
         }
-        // echo PHP_EOL;
 
         return new SolutionResult(
             6,
@@ -69,6 +69,7 @@ class Solution implements SolutionInterface
         $count = 0;
         while ($tile = $board->board[$player_y][$player_x]['tile'] ?? null) {
             if ($tile == '#') {
+                // bump! step back
                 $player_x -= $this->dirs[$dir][0];
                 $player_y -= $this->dirs[$dir][1];
                 $dir = ($dir + 1) % 4;
@@ -77,6 +78,7 @@ class Solution implements SolutionInterface
                 $board->board[$player_y][$player_x] = ['tile' => 'X'];
                 $count++;
             }
+            // move forward
             $player_x += $this->dirs[$dir][0];
             $player_y += $this->dirs[$dir][1];
         }
@@ -88,25 +90,29 @@ class Solution implements SolutionInterface
         $dir = 0;
 
         while ($tile = $board->board[$player_y][$player_x] ?? null) {
+
             if ($tile['tile'] == 'X' && $tile['dirs'][$dir]) {
+                // I was here before
                 return true;
             }
             if ($tile['tile'] == '.' || $tile['tile'] == '^' || $tile['tile'] == 'X') {
+                // mark tile as seen from direction
                 $tile['tile'] = 'X';
                 $tile['dirs'][$dir] = true;
                 $board->board[$player_y][$player_x] = $tile;
             }
             if ($tile['tile'] == '#') {
+                // bump! step back
                 $player_x -= $this->dirs[$dir][0];
                 $player_y -= $this->dirs[$dir][1];
-
+                // turn right
                 $dir = ($dir + 1) % 4;
             }
+            // move forward
             $player_x += $this->dirs[$dir][0];
             $player_y += $this->dirs[$dir][1];
-
-            //   $board->print();
         }
         return false;
     }
+
 }
