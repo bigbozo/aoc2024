@@ -5,7 +5,7 @@ namespace Bizbozo\AdventOfCode\Structures;
 class Board
 {
 
-    private array $board;
+    public array $board;
     public int $width;
     public int $height;
 
@@ -18,7 +18,7 @@ class Board
                     str_split($line)
                 );
             },
-            explode(PHP_EOL, $stream)
+            array_filter(explode(PHP_EOL, $stream), 'trim')
         );
         $this->width = count($this->board[0]);
         $this->height = count($this->board);
@@ -27,7 +27,7 @@ class Board
     public function print(): void
     {
         echo implode(PHP_EOL, array_map(function ($row) {
-            return implode('', $row);
+            return implode('', array_map(fn($cell) => $cell['tile'], $row));
         }, $this->board));
     }
 
@@ -41,6 +41,11 @@ class Board
         if ($x < 0 || $y < 0) return;
         if ($x >= $this->width || $y >= $this->height) return;
         $this->board[$y][$x] = $value;
+    }
+
+    public function each(\Closure $closure): void
+    {
+        $this->board = array_map(fn($row) => array_map($closure, $row), $this->board);
     }
 
 

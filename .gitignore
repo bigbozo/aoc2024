@@ -3,6 +3,7 @@ input/day*.txt
 !input/day*test.txt
 input/*/day*.txt
 !input/*/day*test.txt
+cachegrind.out.*
 
 .env
 /.phpunit.result.cache
