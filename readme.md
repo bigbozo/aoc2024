@@ -2,7 +2,8 @@
 
 https://adventofcode.com/2024/
 
-## [Benchmarks](docs/benchmark.md)
+## Benchmarks
+[Apple Mac Mini M1](docs/benchmark.m1.md)
 
 ## Stub-Generator
 
