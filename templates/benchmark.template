@@ -1,8 +1,8 @@
     /**
      * @Revs(1000)
      */
-    public function benchDay###DAY###()
+    public function benchDay###DAY###(): void
     {
-        (new \Bizbozo\AdventOfCode\Year###YEAR###\Day###DAY###\Solution): void
+        (new \Bizbozo\AdventOfCode\Year###YEAR###\Day###DAY###\Solution)
             ->solve(file_get_contents($this->getInputFilename(###YEAR###, ###day###)));
     }
