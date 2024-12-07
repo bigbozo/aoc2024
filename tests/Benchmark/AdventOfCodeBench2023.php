@@ -23,4 +23,14 @@ class AdventOfCodeBench2023
             ->solve(file_get_contents($this->getInputFilename(2023, 1)));
     }
 
+
+    /**
+     * @Revs(1000)
+     */
+    public function benchDay20(): void
+    {
+//        (new \Bizbozo\AdventOfCode\Year2023\Day20\Solution)
+//            ->solve(file_get_contents($this->getInputFilename(2023, 20)));
+    }
+
 }
