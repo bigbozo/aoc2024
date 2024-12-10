@@ -15,4 +15,9 @@ class Parser
         return array_map('intval', explode(' ', $stream));
     }
 
+    public static function numChars(string $inputStream)
+    {
+        return array_map('intval', str_split($inputStream));
+    }
+
 }
