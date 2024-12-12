@@ -58,7 +58,7 @@ class Solution implements SolutionInterface
         $sum = array_sum($disk);
 
         array_walk($data, function (&$i, $k) {
-            $i = ['type' => $k % 2 ? 's' : 'f', 'id' => $k % 2 ? 0 : $k >> 1, 'len' => $i, 'pos' => $k];
+            $i = ['type' => $k % 2 ? 's' : 'f', 'id' => $k >> 1, 'len' => $i, 'pos' => $k];
         });
 
 
