@@ -98,7 +98,7 @@ class AdventOfCodeBench2024
 
 
     /**
-     * @Revs(1000)
+     * @Revs(20)
      */
     public function benchDay10(): void
     {

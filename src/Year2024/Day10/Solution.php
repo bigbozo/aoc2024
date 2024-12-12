@@ -44,7 +44,8 @@ class Solution implements SolutionInterface
             $nextStep = array_map(
                 function ($cell) use ($counter, $origin, $board) {
 
-                    $board->board[$cell['pos'][1]][$cell['pos'][0]]['visitors'][$origin] = true;
+                    $board->board[$cell['pos'][1]][$cell['pos'][0]]['visitors'][$origin]
+                        = ($board->board[$cell['pos'][1]][$cell['pos'][0]]['visitors'][$origin] ?? 0) + 1;
 
                     return [
                         $counter + 1,
@@ -62,19 +63,25 @@ class Solution implements SolutionInterface
             $queue = array_merge($queue, $nextStep);
         }
 
-        $trailHeads = $board->find(
+        $trailFoots = $board->find(
             fn($item) => $item['tile'] == 9
         );
+
         $sum = array_sum(array_map(
             fn($item) => count($item['visitors']),
-            $trailHeads
+            $trailFoots
+        ));
+
+        $sum2 = array_sum(array_map(
+            fn($item) => array_sum($item['visitors'] ?? []),
+            $trailFoots
         ));
 
 
         return new SolutionResult(
             10,
             new UnitResult("The 1st answer is %s", [$sum]),
-            new UnitResult('The 2nd answer is %s', [0])
+            new UnitResult('The 2nd answer is %s', [$sum2])
         );
     }
 }
