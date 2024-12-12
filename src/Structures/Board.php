@@ -2,6 +2,8 @@
 
 namespace Bizbozo\AdventOfCode\Structures;
 
+use Closure;
+
 class Board
 {
 
@@ -22,6 +24,13 @@ class Board
         );
         $this->width = count($this->board[0]);
         $this->height = count($this->board);
+        for ($x = 0; $x < $this->width; $x++) {
+            for ($y = 0; $y < $this->height; $y++) {
+                $this->board[$y][$x]['pos'] = [$x, $y];
+                $this->board[$y][$x]['id'] = $x + $this->width * $y;
+            }
+        }
+
     }
 
     public function print(): void
@@ -51,9 +60,43 @@ class Board
         return true;
     }
 
-    public function each(\Closure $closure): void
+    public function each(Closure $closure): void
     {
         $this->board = array_map(fn($row) => array_map($closure, $row), $this->board);
+    }
+
+    public function find(Closure $filter): array
+    {
+        return array_filter(array_merge(...$this->board), $filter);
+    }
+
+    /**
+     * returns an array with horizontal and vertical neighbours
+     */
+    public function findNeighbours(array $position): array
+    {
+        $dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+
+        $cells = [];
+        foreach ($dirs as $dir) {
+            if ($cell = $this->get($position[0] + $dir[0], $position[1] + $dir[1])) {
+
+                $cells[] = $cell;
+
+            }
+        }
+
+        return $cells;
+    }
+
+    public function update(mixed $pos, Closure $param): bool
+    {
+        $cell = $this->get($pos[0], $pos[1]);
+        if ($cell) {
+            $this->set($pos[0], $pos[1], $param($cell));
+            return true;
+        }
+        return false;
     }
 
 
