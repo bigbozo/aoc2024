@@ -88,12 +88,22 @@ class AdventOfCodeBench2024
 
 
     /**
-     * @Revs(1000)
+     * @Revs(5)
      */
     public function benchDay09(): void
     {
         (new \Bizbozo\AdventOfCode\Year2024\Day09\Solution)
             ->solve(file_get_contents($this->getInputFilename(2024, 9)));
+    }
+
+
+    /**
+     * @Revs(1000)
+     */
+    public function benchDay10(): void
+    {
+        (new \Bizbozo\AdventOfCode\Year2024\Day10\Solution)
+            ->solve(file_get_contents($this->getInputFilename(2024, 10)));
     }
 
 }
