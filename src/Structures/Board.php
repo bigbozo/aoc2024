@@ -67,7 +67,26 @@ class Board
 
     public function find(Closure $filter): array
     {
-        return array_filter(array_merge(...$this->board), $filter);
+        return array_filter($this->all(), $filter);
+    }
+
+    public function first(Closure $filter, ?array $start = null): ?array
+    {
+        // has to be optimized; speed gain in production from 1.500ms -> 93
+        if ($start) {
+            $offset = $start['pos'][0] + $this->width * $start['pos'][1];
+        } else {
+            $offset = 0;
+        }
+        $size = $this->width * $this->height;
+        for ($i = $offset; $i < $size; $i++) {
+            $x = $i % $this->width;
+            $y = intdiv($i, $this->width);
+            if ($filter($this->board[$y][$x])) {
+                return $this->board[$y][$x];
+            }
+        }
+        return null;
     }
 
     /**
@@ -89,15 +108,38 @@ class Board
         return $cells;
     }
 
-    public function update(mixed $pos, Closure $param): bool
+    public function update(mixed $pos, Closure|array|null $param = null): bool
     {
-        $cell = $this->get($pos[0], $pos[1]);
+        if (is_null($param)) {
+            $this->set($pos['pos'][0], $pos['pos'][1], $pos);
+            return true;
+        }
+        $cell = $this->board[$pos[1]][$pos[1]] ?? null;
         if ($cell) {
-            $this->set($pos[0], $pos[1], $param($cell));
+            if ($param instanceof Closure)
+                $this->set($pos[0], $pos[1], $param($cell));
+            else
+                $this->set($pos[0], $pos[1], $param);
             return true;
         }
         return false;
     }
 
+    /**
+     * @return array|array[]|\array[][]
+     */
+    public function all(): array
+    {
+        return array_merge(...$this->board);
+    }
+
+    public function partition(Closure $partitionFunction)
+    {
+        $result = [];
+        foreach ($this->all() as $cell) {
+            $result[$partitionFunction($cell)][] = $cell;
+        }
+        return $result;
+    }
 
 }
