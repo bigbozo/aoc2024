@@ -12,9 +12,79 @@ use Override;
 class Solution implements SolutionInterface
 {
 
-    private function parseData(string $stream)
+    /**
+     * @param mixed $plot
+     * @param mixed $cell
+     * @param float|int $discountPrice
+     * @return array
+     */
+    public function calculatePlotDiscountPrice(array $plot): int
     {
-        return 1;
+        $discountPrice = 0;
+        $area = count($plot);
+
+        $cols = ArrayUtility::partition($plot, fn($cell) => $cell['pos'][0]);
+        $fenceCount = 0;
+        foreach ($cols as $col) {
+            usort($col, fn($a, $b) => $a['pos'][1] <=> $b['pos'][1]);
+            $left = 0;
+            $right = 0;
+            $oldPos = false;
+            while ($cell = array_shift($col)) {
+                if (isset($cell['fences']['l'])) {
+                    if ($oldPos !== false && $cell['pos'][1] - $oldPos > 1 && $left) {
+                        $fenceCount++;
+                    }
+                    $left = 1;
+                } else {
+                    $fenceCount += $left;
+                    $left = 0;
+                }
+                if (isset($cell['fences']['r'])) {
+                    if ($oldPos !== false && $cell['pos'][1] - $oldPos > 1 && $right) {
+                        $fenceCount++;
+                    }
+                    $right = 1;
+                } else {
+                    $fenceCount += $right;
+                    $right = 0;
+                }
+                $oldPos = $cell['pos'][1];
+            }
+            $fenceCount += $left + $right;
+        }
+        $rows = ArrayUtility::partition($plot, fn($cell) => $cell['pos'][1]);
+        foreach ($rows as $row) {
+            usort($row, fn($a, $b) => $a['pos'][0] <=> $b['pos'][0]);
+            $top = 0;
+            $bottom = 0;
+            $oldPos = false;
+            while ($cell = array_shift($row)) {
+                if (isset($cell['fences']['t'])) {
+                    if ($oldPos !== false && $cell['pos'][0] - $oldPos > 1 && $top) {
+                        $fenceCount++;
+                    }
+                    $top = 1;
+                } else {
+                    $fenceCount += $top;
+                    $top = 0;
+                }
+                if (isset($cell['fences']['b'])) {
+                    if ($oldPos !== false && $cell['pos'][0] - $oldPos > 1 && $bottom) {
+                        $fenceCount++;
+                    }
+                    $bottom = 1;
+                } else {
+                    $fenceCount += $bottom;
+                    $bottom = 0;
+                }
+                $oldPos = $cell['pos'][0];
+            }
+            $fenceCount += $top + $bottom;
+            $top = 0;
+        }
+
+        return $area * $fenceCount;
     }
 
     public function getTitle(): string
@@ -42,10 +112,10 @@ class Solution implements SolutionInterface
             while (count($neighbours)) {
                 $neighbour = array_shift($neighbours);
 
-                $newNeighbours = array_filter(
+                $newNeighbours = array_values(array_filter(
                     $board->findNeighbours($neighbour['pos']),
                     fn($n) => !$n['plot'] && $n['tile'] == $cell['tile']
-                );
+                ));
 
                 foreach ($newNeighbours as $neighbour) {
                     $neighbour['plot'] = $plotId;
@@ -63,6 +133,14 @@ class Solution implements SolutionInterface
         $board->each(function ($cell) use ($board) {
             $neighbours = $board->findNeighbours($cell['pos']);
             $foreignNeighbours = array_filter($neighbours, fn($neighbour) => $neighbour['plot'] != $cell['plot']);
+            $cell['fences'] =
+                array_flip(array_merge(
+                    array_diff(
+                        ['r', 'l', 'b', 't'],
+                        array_keys($neighbours)
+                    ),
+                    array_keys($foreignNeighbours)
+                ));
             $cell['count'] =
                 4 - count($neighbours)
                 + count($foreignNeighbours);
@@ -81,6 +159,9 @@ class Solution implements SolutionInterface
         );
 
         $discountPrice = 0;
+        foreach ($plots as $plot) {
+            $discountPrice += $this->calculatePlotDiscountPrice($plot);
+        }
 
         return new SolutionResult(
             12,

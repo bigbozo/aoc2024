@@ -94,13 +94,18 @@ class Board
      */
     public function findNeighbours(array $position): array
     {
-        $dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+        $dirs = [
+            'r'=>[1, 0],
+            'b'=>[0, 1],
+            'l'=>[-1, 0],
+            't'=>[0, -1]
+        ];
 
         $cells = [];
-        foreach ($dirs as $dir) {
+        foreach ($dirs as $label=>$dir) {
             if ($cell = $this->get($position[0] + $dir[0], $position[1] + $dir[1])) {
 
-                $cells[] = $cell;
+                $cells[$label] = $cell;
 
             }
         }

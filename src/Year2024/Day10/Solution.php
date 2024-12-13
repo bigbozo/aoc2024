@@ -39,7 +39,7 @@ class Solution implements SolutionInterface
 
             //echo sprintf("%s - %s - %s/%s\n", $origin, $counter, ...$currentPosition);
 
-            $neighbours = $board->findNeighbours($currentPosition);
+            $neighbours = array_values($board->findNeighbours($currentPosition));
 
             $nextStep = array_map(
                 function ($cell) use ($counter, $origin, $board) {
