@@ -60,8 +60,8 @@ class Solution implements SolutionInterface
 
         return new SolutionResult(
             3,
-            new UnitResult("The 1st answer is %s", [$sum]),
-            new UnitResult('The 2nd answer is %s', [$sum2])
+            new UnitResult("%s is the output of the fixed program", [$sum]),
+            new UnitResult('When only the enabled multiplications are considered, the correct output is %s', [$sum2])
         );
     }
 }

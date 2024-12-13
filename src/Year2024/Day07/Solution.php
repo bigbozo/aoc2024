@@ -60,8 +60,8 @@ class Solution implements SolutionInterface
 
         return new SolutionResult(
             7,
-            new UnitResult("The 1st answer is %s", [$score]),
-            new UnitResult('The 2nd answer is %s', [$score2])
+            new UnitResult("The total calibration result evaluates to %s", [$score]),
+            new UnitResult('When considering the hiding spots of those gnarly elephants, the calibration result changes to %s', [$score2])
         );
     }
 

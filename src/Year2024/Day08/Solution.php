@@ -83,8 +83,8 @@ class Solution implements SolutionInterface
 
         return new SolutionResult(
                 8,
-                new UnitResult("The 1st answer is %s", [$score]),
-                new UnitResult('The 2nd answer is %s', [$score2])
+                new UnitResult("There are %s location containing an antinode", [$score]),
+                new UnitResult('Using the updated model there are %s locations', [$score2])
             );
         }
     }

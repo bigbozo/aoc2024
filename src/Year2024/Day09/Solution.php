@@ -109,8 +109,8 @@ class Solution implements SolutionInterface
 
         return new SolutionResult(
             9,
-            new UnitResult("The 1st answer is %s", [$sum]),
-            new UnitResult('The 2nd answer is %s', [$sum2])
+            new UnitResult("The disks filesystem checksum is %s ", [$sum]),
+            new UnitResult('The checksum when not fragmenting files is %s', [$sum2])
         );
     }
 
