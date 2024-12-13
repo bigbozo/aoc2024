@@ -166,7 +166,7 @@ class Solution implements SolutionInterface
         return new SolutionResult(
             12,
             new UnitResult("It will cost %s to fence all regions", [$price]),
-            new UnitResult('The 2nd answer is %s', [$discountPrice])
+            new UnitResult('Considering the discount policy this is reduced to %s', [$discountPrice])
         );
     }
 }
