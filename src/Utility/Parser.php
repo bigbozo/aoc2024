@@ -9,10 +9,21 @@ class Parser
         return array_filter(explode(PHP_EOL, $stream), 'trim');
     }
 
-    public static function numbers($stream): array
+    public static function numbers(string $stream, string $divider = ' '): array
     {
 
-        return array_map('intval', explode(' ', $stream));
+        return array_map('intval', explode($divider, $stream));
+    }
+
+    public static function values($stream): array
+    {
+        $result = [];
+        $equations = explode(' ', $stream);
+        foreach ($equations as $equation) {
+            [$key, $val] = explode('=', $equation);
+            $result[$key] = $val;
+        }
+        return $result;
     }
 
     public static function numChars(string $inputStream)
