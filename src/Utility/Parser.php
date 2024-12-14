@@ -20,4 +20,9 @@ class Parser
         return array_map('intval', str_split($inputStream));
     }
 
+    public static function blocks(string $inputStream)
+    {
+        return explode(PHP_EOL . PHP_EOL, trim($inputStream));
+    }
+
 }
