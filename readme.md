@@ -15,7 +15,10 @@ https://adventofcode.com/2024/
     bin/aoc run <day> [<to_day>] 
     bin/aoc run <day> <year>
     bin/aoc run <day> <to_day> <year>
-
 ## Run Benchmarks
 
     bin/aoc bench
+
+### The tree of day 14
+
+![day14.7861.png](docs/day14.7861.png)

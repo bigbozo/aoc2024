@@ -8,7 +8,8 @@
     "bramus/ansi-php": "^3.1",
     "symfony/console": "^7.0",
     "ext-gd": "*",
-    "ext-bcmath": "*"
+    "ext-bcmath": "*",
+    "ext-gmp": "*"
   },
   "autoload": {
     "psr-4": {
